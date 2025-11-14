@@ -6,7 +6,7 @@ This repository is organized by the specific questions asked to understand data 
 Each folder contains notebooks and code demonstrating how to answer one of these core questions:
 | Question | Folder |
 |--------|----------|
-| Is my data clean and complete? | `data-quality/` |
+| Is my data clean and complete? | [`data-quality/`](./data-quality/) |
 | What do individual variables look like? | `distributions/` |
 | Which variables are related? | `correlations/` |
 | Are there anomalies or outliers? | `outlier-detection/` |
