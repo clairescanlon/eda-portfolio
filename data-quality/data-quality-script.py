@@ -1,5 +1,3 @@
-# The code does not modify, clean, or transform the data. This diagnoses and reports data quality issues within the data. 
-
 import pandas as pd
 import numpy as np
 from pathlib import Path
