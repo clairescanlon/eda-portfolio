@@ -8,8 +8,8 @@ Each folder contains a README.md, Python script, and the output(s) of the script
 |--------|----------|----------|
 | Is my data clean and complete? | [`data-quality/`](./data-quality/) | Detect missing values (nulls), duplicates, invalid entries, type mismatches, and overall completeness.
 | What do individual variables look like? | [`distributions/`](./distributions/) | Visualize distributions, frequency counts, histograms, density plots, and summary statistics of each variable.
-| Which variables are related? |  [`correlations/`](./correlations/)|
-| Are there anomalies or outliers? | [`outlier-detection/`](./outlier-detection/) | Which numeric values are statistically unusual? How many outliers exist per column?  Which values are flagged by multiple detection methods (consensus)? Where are these anomalous values located? 
+| Which variables are related? |  [`correlations/`](./correlations/)|Statistical correlation and association analysis to determine relationships between variables (Pearson, Spearman, Cramér's V). 
+| Are there anomalies or outliers? | [`outlier-detection/`](./outlier-detection/) | Identification of statistically unusual values, number of outliers per variable, consensus outliers from different methods, and their locations.
 | Do natural groups exist? | `segmentation/` |
 | Are there patterns over time? | `temporal-analysis/` |
 | Are differences statistically significant? | `statistical-testing/` |
