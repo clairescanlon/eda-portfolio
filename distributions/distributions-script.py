@@ -73,7 +73,7 @@ class DistributionAnalyzer:
             json.dump(self.summary, f, indent=2, default=str)
         logger.info(f"Summary exported to {file_path}")
 
-def main(input_file="data/dataset.csv"):
+def analyze_distributions(input_file="data/dataset.csv"):
     try:
         df = pd.read_csv(input_file)
         analyzer = DistributionAnalyzer(df)
@@ -88,4 +88,5 @@ def main(input_file="data/dataset.csv"):
         logger.error(f"Distribution analysis failed: {e}")
 
 if __name__ == "__main__":
-    main()
+    analyze_distributions()
+
