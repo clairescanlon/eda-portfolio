@@ -6,5 +6,21 @@ Purpose: Detect data quality issues before they corrupt downstream analytics, da
 
 
 ## Core Question Answered: "Is my data clean and complete?"
-Are there missing values (nulls) that break analysis? </br>
+[more coming]
+
+## Data Quality Assessment Informs Project Strategy
+Project Start
+    ↓
+Run Data Quality Assessment (THIS CODE)
+    ↓
+Review Quality Score & Recommendations
+    ↓
+Create Data Strategy Based on Findings:
+  ├─ Imputation strategy (for missing data)
+  ├─ Deduplication strategy (for duplicates)
+  ├─ Validation rules (for invalid data)
+  ├─ Type conversion (for mismatches)
+  └─ Timeline & resources (based on effort)
+    ↓
+Execute Data Strategy
 
