@@ -8,7 +8,7 @@ Each folder contains a README.md, Python script, and the output(s) of the script
 |--------|----------|----------|
 | Is my data clean and complete? | [`data-quality/`](./data-quality/) | Are there missing values (nulls) that break analysis?
 | What do individual variables look like? | `distributions/` |
-| Which variables are related? | `correlations/` |
+| Which variables are related? |  [`correlations/`](./correlations/)|
 | Are there anomalies or outliers? | [`outlier-detection/`](./outlier-detection/) | Which numeric values are statistically unusual? How many outliers exist per column?  Which values are flagged by multiple detection methods (consensus)? Where are these anomalous values located? 
 | Do natural groups exist? | `segmentation/` |
 | Are there patterns over time? | `temporal-analysis/` |
