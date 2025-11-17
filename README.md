@@ -3,7 +3,7 @@ Exploratory Data Analysis (EDA) is prioritized at the start of every data projec
 
 This repository is organized by the specific questions asked to understand data better. 
 
-Each folder contains notebooks and code demonstrating how to answer one of these core questions:
+Each folder contains a README.md, Python script, and the output(s) of the script demonstrating how to answer one of these core questions:
 | Question | Folder | Includes |
 |--------|----------|----------|
 | Is my data clean and complete? | [`data-quality/`](./data-quality/) | Are there missing values (nulls) that break analysis?
