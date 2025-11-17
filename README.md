@@ -1,5 +1,5 @@
 # Exploratory Data Analysis (EDA)
-A systematic framework for understanding your data **before** any cleaning, modeling, or strategic decisions. This portfolio provides modular, reusable Python tools to answer eight core questions about data structure, quality, relationships, and patterns.
+A systematic framework for understanding your data **before** any cleaning, modeling, or strategic decisions. This repository provides modular, reusable Python tools to answer eight core questions about data structure, quality, relationships, and patterns.
 
 > [!NOTE]
 > **Philosophy**: EDA tools **analyze and report**—they never modify, clean, or transform data. By understanding data exactly as it exists, you make informed decisions about your project strategy.
