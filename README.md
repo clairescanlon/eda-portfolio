@@ -6,8 +6,8 @@ This repository is organized by the specific questions asked to understand data 
 Each folder contains a README.md, Python script, and the output(s) of the script demonstrating how to answer one of these core questions:
 | Core Question | Folder | Includes |
 |--------|----------|----------|
-| Is my data clean and complete? | [`data-quality/`](./data-quality/) | Are there missing values (nulls) that break analysis?
-| What do individual variables look like? | `distributions/` |
+| Is my data clean and complete? | [`data-quality/`](./data-quality/) | Detect missing values (nulls), duplicates, invalid entries, type mismatches, and overall completeness.
+| What do individual variables look like? | [`distributions/`](./distributions/) | Visualize distributions, frequency counts, histograms, density plots, and summary statistics of each variable.
 | Which variables are related? |  [`correlations/`](./correlations/)|
 | Are there anomalies or outliers? | [`outlier-detection/`](./outlier-detection/) | Which numeric values are statistically unusual? How many outliers exist per column?  Which values are flagged by multiple detection methods (consensus)? Where are these anomalous values located? 
 | Do natural groups exist? | `segmentation/` |
