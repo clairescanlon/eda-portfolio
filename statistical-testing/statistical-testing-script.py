@@ -121,7 +121,9 @@ class StatTestRunner:
             json.dump(self.results, f, indent=2, default=str)
         logger.info(f"Results exported to {file_out}")
 
-def main(input_file="data/dataset.csv", output_file="output/stat_tests.json"):
+def analyze_statistical_tests(input_file="data/dataset.csv", 
+output_file="output/stat_tests.json"):
+
     try:
         df = pd.read_csv(input_file)
         runner = StatTestRunner(df)
@@ -137,4 +139,4 @@ def main(input_file="data/dataset.csv", output_file="output/stat_tests.json"):
         logger.error(f"Statistical testing failed: {e}")
 
 if __name__ == "__main__":
-    main()
+    analyze_statistical_tests()
