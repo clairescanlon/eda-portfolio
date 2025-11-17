@@ -1,26 +1,32 @@
+# Data Quality Module
 
 ## Overview
-This code is a data quality diagnostic tool. It performs exploratory data analysis (EDA) focused specifically on the data quality dimension.  This code does not modify, clean, or transform the data. It diagnoses and reports on the data quality of the data. 
+The data quality module systematically evaluates dataset integrity across multiple quality dimensions. It diagnoses and reports data quality issues (missing values, duplicates, invalid entries, type mismatches) **without modifying, cleaning, or transforming the data**—enabling you to understand data structure exactly as it exists before creating a project strategy.
 
-Purpose: Detect data quality issues before they corrupt downstream analytics, dashboards, or machine learning models. Identify issues with the data before creating a strategy for the data in the project.
+*Purpose:* Detect data quality issues before they corrupt downstream analytics, dashboards, or machine learning models. Identify issues with the data before creating a strategy for the data in the project.
 
+## Core Question Answered: 
+**Is my data clean and complete?**
 
-## Core Question Answered: "Is my data clean and complete?"
-[more coming]
+This code:
+* Assesses completeness by measuring null/missing values per column and overall dataset fill rate
+* Evaluates consistency by identifying duplicate records and unique value patterns
+* Validates data against business rules (min/max constraints, allowed values, type requirements)
+* Reports type compliance—ensuring each column contains the expected data type
+* Flags specific columns and records with quality issues for investigation and remediation
 
-## Data Quality Assessment Informs Project Strategy </br>
-Project Start</br>
-    ↓</br>
-Run Data Quality Assessment (THIS CODE)</br>
-    ↓</br>
-Review Quality Score & Recommendations</br>
-    ↓</br>
-Create Data Strategy Based on Findings:</br>
-  ├─ Imputation strategy (for missing data)</br>
-  ├─ Deduplication strategy (for duplicates)</br>
-  ├─ Validation rules (for invalid data)</br>
-  ├─ Type conversion (for mismatches)</br>
-  └─ Timeline & resources (based on effort)</br>
-    ↓</br>
-Execute Data Strategy</br>
+## Key Features:
+* Diagnoses data quality issues **without cleaning, dropping, or modifying any data**—all analysis on raw input
+* Assesses four critical dimensions: Completeness, Consistency, Validity, and Type Compliance
+* Supports parameterized validation rules—define min/max bounds, allowed values, and required fields per project
+* Reports structured metrics: null counts, percentages, violation details, and issue indices
+* Outputs comprehensive JSON report with per-field and per-issue granularity for easy troubleshooting
+* Modular, extensible, and PEP8-compliant codebase ready for production use
+* Full logging of all analysis steps and findings for reproducibility and audit trails
+* Results directly inform data cleaning strategy, resource allocation, and project feasibility before work begins
 
+> [!TIP]
+> Data quality issues are often symptoms of upstream problems—data collection errors, system integration issues, or schema changes. Always investigate root causes in source systems before spending time cleaning data downstream.
+
+> [!WARNING]
+> High missing-data percentages (>20%) in critical fields may require source system intervention or entirely new data collection. Assess feasibility and timelines before committing to data cleaning.
