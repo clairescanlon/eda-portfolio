@@ -8,19 +8,19 @@ Purpose: Detect data quality issues before they corrupt downstream analytics, da
 ## Core Question Answered: "Is my data clean and complete?"
 [more coming]
 
-## Data Quality Assessment Informs Project Strategy
-Project Start
-    ↓
-Run Data Quality Assessment (THIS CODE)
-    ↓
-Review Quality Score & Recommendations
-    ↓
-Create Data Strategy Based on Findings:
-  ├─ Imputation strategy (for missing data)
-  ├─ Deduplication strategy (for duplicates)
-  ├─ Validation rules (for invalid data)
-  ├─ Type conversion (for mismatches)
-  └─ Timeline & resources (based on effort)
-    ↓
-Execute Data Strategy
+## Data Quality Assessment Informs Project Strategy </br>
+Project Start</br>
+    ↓</br>
+Run Data Quality Assessment (THIS CODE)</br>
+    ↓</br>
+Review Quality Score & Recommendations</br>
+    ↓</br>
+Create Data Strategy Based on Findings:</br>
+  ├─ Imputation strategy (for missing data)</br>
+  ├─ Deduplication strategy (for duplicates)</br>
+  ├─ Validation rules (for invalid data)</br>
+  ├─ Type conversion (for mismatches)</br>
+  └─ Timeline & resources (based on effort)</br>
+    ↓</br>
+Execute Data Strategy</br>
 
