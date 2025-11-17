@@ -3,6 +3,7 @@ Performs hypothesis testing to determine if observed differences are statistical
 - Handles t-tests, Mann-Whitney U, ANOVA, and chi-square for numeric/categorical group comparisons. </br>
 - Reports results in JSON (and prints examples). </br>
  </br>
+ 
 ## Key features: </br>
 No cleaning, fixing, or removal of missing values—analyzes real data as-is. </br>
 Compares means with t-tests and ANOVA, medians with Mann-Whitney U, and categorical associations with chi-square. </br>
