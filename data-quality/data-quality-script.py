@@ -4,12 +4,30 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any
 import logging
 from enum import Enum
+import json
+
+# Import from utils
+from utils.constants import (
+    MAX_MISSING_RATE,
+    MIN_UNIQUE_RATIO,
+    MAX_UNIQUE_RATIO,
+    JSON_INDENT,
+    LOGGING_FORMAT,
+    LOGGING_LEVEL
+)
+from utils.data_utils import (
+    get_numeric_columns,
+    get_categorical_columns,
+    check_missing_values,
+    get_dataframe_summary,
+    detect_column_types
+)
 
 
-# Configure logging for transparency and debugging
+# Configure logging using standardized format from utils
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=getattr(logging, LOGGING_LEVEL),
+    format=LOGGING_FORMAT
 )
 logger = logging.getLogger(__name__)
 
@@ -130,14 +148,23 @@ class DataQualityAnalyzer:
         """
         Assess data completeness across all fields.
         
+        Uses utils.data_utils.check_missing_values for consistent reporting.
+        
         Returns:
             Dictionary with completeness metrics
         """
+        # Use utility function for missing value analysis
+        missing_stats = check_missing_values(self.data)
+        
         completeness = {}
-
         for column in self.data.columns:
-            null_count = self.data[column].isnull().sum()
-            null_pct = (null_count / len(self.data)) * 100
+            if column in missing_stats:
+                null_count = missing_stats[column]['count']
+                null_pct = missing_stats[column]['percent']
+            else:
+                null_count = 0
+                null_pct = 0.0
+            
             completeness[column] = {
                 "null_count": null_count,
                 "null_percentage": null_pct,
@@ -210,6 +237,20 @@ class DataQualityAnalyzer:
         self.report["validity"] = validity
         return validity
 
+    def assess_data_summary(self) -> Dict[str, Any]:
+        """
+        Generate high-level data summary using utils.
+        
+        Returns:
+            Dictionary with data summary metrics
+        """
+        summary = get_dataframe_summary(self.data)
+        column_types = detect_column_types(self.data)
+        
+        summary['column_types'] = column_types
+        self.report["data_summary"] = summary
+        return summary
+
     def generate_report(self) -> Dict[str, Any]:
         """
         Generate comprehensive data quality report.
@@ -221,6 +262,9 @@ class DataQualityAnalyzer:
         self.report["total_rows"] = len(self.data)
         self.report["total_columns"] = len(self.data.columns)
         self.report["timestamp"] = pd.Timestamp.now().isoformat()
+        
+        # Add data summary from utils
+        self.assess_data_summary()
 
         logger.info(f"Generated quality report for {self.name}")
         return self.report
@@ -229,15 +273,16 @@ class DataQualityAnalyzer:
         """
         Export quality report to JSON file.
         
+        Uses JSON_INDENT constant for consistent formatting.
+        
         Args:
             filepath: relative path for output (security best practice)
         """
         output_path = Path(filepath)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        import json
         with open(output_path, 'w') as f:
-            json.dump(self.report, f, indent=2, default=str)
+            json.dump(self.report, f, indent=JSON_INDENT, default=str)
 
         logger.info(f"Report exported to {filepath}")
 
