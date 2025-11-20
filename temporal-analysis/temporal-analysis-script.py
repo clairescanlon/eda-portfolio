@@ -6,18 +6,38 @@ from abc import ABC, abstractmethod
 import logging
 import json
 import warnings
-from statsmodels.tsa.stattools import adfuller, acf, pacf, kpss
+from statsmodels.tsa.stattools import adfuller, acf, pacf
 from statsmodels.tsa.seasonal import seasonal_decompose
-from scipy import signal
+
+# Import from utils
+from utils.constants import (
+    DEFAULT_SEASONAL_PERIOD,
+    ACF_MAX_LAGS,
+    KPSS_REGRESSION,
+    ADF_AUTOLAG,
+    JSON_INDENT,
+    LOGGING_FORMAT,
+    LOGGING_LEVEL
+)
+from utils.data_utils import (
+    get_numeric_columns,
+    check_missing_values
+)
+
 
 warnings.filterwarnings('ignore')
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+# Configure logging using standardized format from utils
+logging.basicConfig(
+    level=getattr(logging, LOGGING_LEVEL),
+    format=LOGGING_FORMAT
+)
 logger = logging.getLogger(__name__)
 
 
 class TimeSeriesDecomposer(ABC):
     """Base class for time series decomposition methods."""
-    
+
     @abstractmethod
     def decompose(self, series: pd.Series, period: int) -> Dict[str, Any]:
         """Decompose time series into components."""
@@ -26,14 +46,16 @@ class TimeSeriesDecomposer(ABC):
 
 class AdditiveDecomposer(TimeSeriesDecomposer):
     """Additive decomposition: Y = Trend + Seasonal + Residual."""
-    
-    def decompose(self, series: pd.Series, period: int) -> Dict[str, Any]:
+
+    def decompose(self, series: pd.Series, period: int = DEFAULT_SEASONAL_PERIOD) -> Dict[str, Any]:
         """
         Perform additive decomposition.
         
+        Uses DEFAULT_SEASONAL_PERIOD constant by default.
+        
         Args:
             series: Time series to decompose
-            period: Seasonal period
+            period: Seasonal period (uses constant by default)
             
         Returns:
             Dictionary with decomposition components and metrics
@@ -48,6 +70,7 @@ class AdditiveDecomposer(TimeSeriesDecomposer):
             
             return {
                 'method': 'additive',
+                'period': period,
                 'trend': result.trend.tolist(),
                 'seasonal': result.seasonal.tolist(),
                 'residual': result.resid.tolist(),
@@ -62,14 +85,16 @@ class AdditiveDecomposer(TimeSeriesDecomposer):
 
 class MultiplicativeDecomposer(TimeSeriesDecomposer):
     """Multiplicative decomposition: Y = Trend × Seasonal × Residual."""
-    
-    def decompose(self, series: pd.Series, period: int) -> Dict[str, Any]:
+
+    def decompose(self, series: pd.Series, period: int = DEFAULT_SEASONAL_PERIOD) -> Dict[str, Any]:
         """
         Perform multiplicative decomposition.
         
+        Uses DEFAULT_SEASONAL_PERIOD constant by default.
+        
         Args:
             series: Time series (positive values only)
-            period: Seasonal period
+            period: Seasonal period (uses constant by default)
             
         Returns:
             Dictionary with decomposition components and metrics
@@ -93,6 +118,7 @@ class MultiplicativeDecomposer(TimeSeriesDecomposer):
             
             return {
                 'method': 'multiplicative',
+                'period': period,
                 'trend': result.trend.tolist(),
                 'seasonal': result.seasonal.tolist(),
                 'residual': result.resid.tolist(),
@@ -107,10 +133,12 @@ class MultiplicativeDecomposer(TimeSeriesDecomposer):
 
 class TemporalAnalyzer:
     """Comprehensive time series analysis without data modification."""
-    
+
     def __init__(self, df: pd.DataFrame, time_col: str, value_cols: Optional[List[str]] = None):
         """
         Initialize temporal analyzer.
+        
+        Uses get_numeric_columns() from data_utils if value_cols not specified.
         
         Args:
             df: DataFrame with time series data
@@ -130,18 +158,20 @@ class TemporalAnalyzer:
             logger.error(f"Failed to parse time column {time_col}: {e}")
             raise
         
-        # Select value columns
+        # Select value columns using utility function
         if value_cols is None:
-            self.value_cols = self.df.select_dtypes(include=[np.number]).columns.tolist()
+            self.value_cols = get_numeric_columns(self.df)
         else:
             self.value_cols = value_cols
         
         self.results = {}
         logger.info(f"Initialized TemporalAnalyzer with {len(self.value_cols)} time series")
-    
+
     def detect_stationarity(self, series: pd.Series) -> Dict[str, Any]:
         """
         Test stationarity using Augmented Dickey-Fuller test.
+        
+        Uses ADF_AUTOLAG constant for lag selection.
         
         Args:
             series: Time series to test
@@ -155,10 +185,11 @@ class TemporalAnalyzer:
             return {'method': 'ADF', 'status': 'insufficient_data', 'n_obs': len(series_clean)}
         
         try:
-            adf_result = adfuller(series_clean, autolag='AIC')
+            adf_result = adfuller(series_clean, autolag=ADF_AUTOLAG)
             
             return {
                 'method': 'ADF',
+                'autolag': ADF_AUTOLAG,
                 'statistic': float(adf_result[0]),
                 'p_value': float(adf_result[1]),
                 'is_stationary': adf_result[1] < 0.05,
@@ -169,14 +200,16 @@ class TemporalAnalyzer:
         except Exception as e:
             logger.warning(f"ADF test failed: {e}")
             return {'method': 'ADF', 'error': str(e)}
-    
-    def detect_autocorrelation(self, series: pd.Series, nlags: int = 40) -> Dict[str, Any]:
+
+    def detect_autocorrelation(self, series: pd.Series, nlags: int = ACF_MAX_LAGS) -> Dict[str, Any]:
         """
         Calculate ACF and PACF for seasonality detection.
         
+        Uses ACF_MAX_LAGS constant by default.
+        
         Args:
             series: Time series to analyze
-            nlags: Number of lags
+            nlags: Number of lags (uses constant by default)
             
         Returns:
             Dictionary with ACF/PACF results
@@ -196,6 +229,7 @@ class TemporalAnalyzer:
             significant_pacf = [i for i, val in enumerate(pacf_vals[1:], 1) if abs(val) > ci]
             
             return {
+                'nlags': nlags,
                 'acf': acf_vals.tolist(),
                 'pacf': pacf_vals.tolist(),
                 'confidence_interval': float(ci),
@@ -205,7 +239,7 @@ class TemporalAnalyzer:
         except Exception as e:
             logger.warning(f"Autocorrelation failed: {e}")
             return {'error': str(e)}
-    
+
     def analyze_trend(self, series: pd.Series) -> Dict[str, Any]:
         """
         Analyze trend direction and strength via linear regression.
@@ -255,7 +289,7 @@ class TemporalAnalyzer:
             'min': float(np.min(y)),
             'max': float(np.max(y))
         }
-    
+
     def detect_changepoints(self, series: pd.Series, threshold: float = 2.0) -> Dict[str, Any]:
         """
         Detect sudden changes in time series level.
@@ -287,14 +321,16 @@ class TemporalAnalyzer:
             'mean_change': float(mean_diff),
             'std_change': float(std_diff)
         }
-    
-    def decompose_series(self, series: pd.Series, period: int = 12) -> Dict[str, Any]:
+
+    def decompose_series(self, series: pd.Series, period: int = DEFAULT_SEASONAL_PERIOD) -> Dict[str, Any]:
         """
         Apply decomposition methods.
         
+        Uses DEFAULT_SEASONAL_PERIOD constant by default.
+        
         Args:
             series: Time series to decompose
-            period: Seasonal period
+            period: Seasonal period (uses constant by default)
             
         Returns:
             Dictionary with decompositions
@@ -315,17 +351,22 @@ class TemporalAnalyzer:
                 decompositions['multiplicative'] = result_mult
         
         return decompositions
-    
-    def analyze(self, period: int = 12) -> Dict[str, Any]:
+
+    def analyze(self, period: int = DEFAULT_SEASONAL_PERIOD) -> Dict[str, Any]:
         """
         Run full temporal analysis on all value columns.
         
+        Uses DEFAULT_SEASONAL_PERIOD constant by default.
+        
         Args:
-            period: Seasonal period
+            period: Seasonal period (uses constant by default)
             
         Returns:
             Complete analysis results
         """
+        # Check missing values using utility
+        missing_stats = check_missing_values(self.df[self.value_cols])
+        
         for col in self.value_cols:
             logger.info(f"Analyzing temporal patterns in {col}...")
             series = self.df[col]
@@ -333,6 +374,7 @@ class TemporalAnalyzer:
             self.results[col] = {
                 'total_observations': len(series),
                 'missing_values': int(series.isnull().sum()),
+                'missing_percentage': missing_stats.get(col, {}).get('percent', 0.0),
                 'date_range': {
                     'start': str(series.index.min()),
                     'end': str(series.index.max()),
@@ -346,39 +388,68 @@ class TemporalAnalyzer:
             }
         
         return self.results
-    
+
     def export(self, file_path: str) -> None:
-        """Export temporal analysis to JSON."""
+        """
+        Export temporal analysis to JSON.
+        
+        Uses JSON_INDENT constant for consistent formatting.
+        Includes configuration parameters.
+        
+        Args:
+            file_path: Output file path
+        """
         Path(file_path).parent.mkdir(parents=True, exist_ok=True)
+        
+        # Add configuration metadata
+        export_data = {
+            'configuration': {
+                'default_seasonal_period': DEFAULT_SEASONAL_PERIOD,
+                'acf_max_lags': ACF_MAX_LAGS,
+                'adf_autolag': ADF_AUTOLAG,
+                'kpss_regression': KPSS_REGRESSION
+            },
+            'results': self.results
+        }
+        
         with open(file_path, 'w') as f:
-            json.dump(self.results, f, indent=2, default=str)
+            json.dump(export_data, f, indent=JSON_INDENT, default=str)
+        
         logger.info(f"Temporal analysis exported to {file_path}")
 
 
-def analyze_temporal_patterns(input_file: str, time_col: str, output_file: str, period: int = 12):
+def analyze_temporal_patterns(input_file: str, time_col: str, output_file: str, 
+                              period: int = DEFAULT_SEASONAL_PERIOD):
     """
     Main entry point: load, analyze, and export temporal results.
+    
+    Uses DEFAULT_SEASONAL_PERIOD constant by default.
     
     Args:
         input_file: Path to CSV with time series data
         time_col: Column name containing datetime
         output_file: Path for JSON output
-        period: Seasonal period
+        period: Seasonal period (uses constant by default)
     """
     try:
+        logger.info(f"Loading data from {input_file}")
         df = pd.read_csv(input_file)
+        
         analyzer = TemporalAnalyzer(df, time_col=time_col)
         results = analyzer.analyze(period=period)
         analyzer.export(output_file)
         
         print(f"✓ Temporal analysis complete on {len(results)} time series")
+        print(f"✓ Seasonal period: {period}")
         print(f"✓ Exported to {output_file}")
         
         # Print summary
+        print("\n=== Series Summary ===")
         for col, analysis in results.items():
             trend = analysis['trend'].get('direction', 'unknown')
             stationarity = "stationary" if analysis['stationarity'].get('is_stationary') else "non-stationary"
-            print(f"  {col}: {trend} trend, {stationarity}")
+            n_changepoints = analysis['changepoints'].get('n_changepoints', 0)
+            print(f"  {col}: {trend} trend, {stationarity}, {n_changepoints} changepoints")
         
     except Exception as e:
         logger.error(f"Temporal analysis failed: {e}")
@@ -390,5 +461,5 @@ if __name__ == "__main__":
         input_file="data/timeseries.csv",
         time_col="date",
         output_file="output/temporal_analysis.json",
-        period=12
+        period=DEFAULT_SEASONAL_PERIOD
     )
