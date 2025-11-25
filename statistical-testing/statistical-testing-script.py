@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from scipy.stats import ttest_ind, mannwhitneyu, f_oneway, chi2_contingency
 import json
 import logging
