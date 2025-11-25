@@ -226,9 +226,7 @@ class StatTestRunner:
         "anova": [],
         "chi2": []
     }
-    
-    logger.info("Running statistical tests...")
-        
+            
         logger.info("Running statistical tests...")
         
         # Pairwise numeric ~ categorical
