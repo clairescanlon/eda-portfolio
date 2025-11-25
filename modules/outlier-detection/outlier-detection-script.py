@@ -260,8 +260,8 @@ class OutlierAnalyzer:
         # Use utility function for column detection
         self.numeric_columns = get_numeric_columns(data)
         
-        logger.info(f"Initialized OutlierAnalyzer for {name}")
-        logger.info(f"Identified {len(self.numeric_columns)} numeric columns")
+        logger.info("Initialized OutlierAnalyzer for %s", name)
+        logger.info("Identified %s numeric columns", len(self.numeric_columns))
 
     def detect_outliers(self, methods: Optional[List[str]] = None) -> Dict[str, Any]:
         """
@@ -278,7 +278,7 @@ class OutlierAnalyzer:
         results = {}
         
         for col in self.numeric_columns:
-            logger.info(f"Analyzing column: {col}")
+            logger.info("Analyzing column: %s", col)
             results[col] = self._analyze_column(col, methods)
         
         self.report["outliers"] = results
@@ -354,7 +354,7 @@ class OutlierAnalyzer:
                 }
         
         self.report["consensus"] = consensus
-        logger.info(f"Identified consensus outliers in {len(consensus)} columns")
+        logger.info("Identified consensus outliers in %s columns", len(consensus))
         return consensus
 
     def generate_summary(self) -> Dict[str, Any]:
@@ -403,7 +403,7 @@ class OutlierAnalyzer:
         with open(output_path, 'w') as f:
             json.dump(self.report, f, indent=JSON_INDENT, default=str)
         
-        logger.info(f"Outlier report exported to {filepath}")
+        logger.info("Outlier report exported to %s", filepath)
 
 
 def analyze_outliers(input_file: str, output_file: str,
@@ -425,7 +425,7 @@ def analyze_outliers(input_file: str, output_file: str,
         data_path = Path(input_file)
         
         if not data_path.exists():
-            logger.error(f"Input file not found: {input_file}")
+            logger.error("Input file not found: %s", input_file)
             raise FileNotFoundError(f"Input file not found: {input_file}")
         
         logger.info(f"Loading data from {input_file}")
@@ -442,7 +442,7 @@ def analyze_outliers(input_file: str, output_file: str,
         return report
         
     except Exception as e:
-        logger.error(f"Error during outlier analysis: {str(e)}")
+        logger.error("Error during outlier analysis: %s", str(e))
         raise
 
 
