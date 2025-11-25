@@ -136,7 +136,7 @@ class SegmentationAnalyzer:
         self.X_scaled = None
         self.results = {}
         
-        logger.info(f"Initialized SegmentationAnalyzer for {name} with {len(self.numeric_cols)} numeric columns")
+        logger.info("Initialized SegmentationAnalyzer for %s with %s numeric columns", name, len(self.numeric_cols))
 
     def preprocess(self) -> np.ndarray:
         """
@@ -154,7 +154,7 @@ class SegmentationAnalyzer:
         missing_stats = check_missing_values(self.df[self.numeric_cols])
         
         if missing_stats:
-            logger.info(f"Missing values found: {missing_stats}")
+            logger.info("Missing values found: %s", missing_stats)
         
         # Impute with mean for clustering (calculation only, doesn't modify original)
         X = X.fillna(X.mean())
@@ -163,7 +163,7 @@ class SegmentationAnalyzer:
         scaler = StandardScaler()
         self.X_scaled = scaler.fit_transform(X)
         
-        logger.info(f"Data preprocessed: shape {self.X_scaled.shape}")
+        logger.info("Data preprocessed: shape %s", self.X_scaled.shape)
         return self.X_scaled
 
     def find_optimal_k(self, max_k: int = 10) -> int:
@@ -189,7 +189,7 @@ class SegmentationAnalyzer:
         differences = np.diff(inertias)
         optimal_k = np.argmax(np.diff(differences)) + 2
         
-        logger.info(f"Suggested optimal k: {optimal_k}")
+        logger.info("Suggested optimal k: %s", optimal_k)
         return optimal_k
 
     def cluster(self, n_clusters: int = DEFAULT_N_CLUSTERS) -> Dict[str, Any]:
@@ -239,9 +239,10 @@ class SegmentationAnalyzer:
                     'quality_acceptable': quality_acceptable
                 }
                 
-                quality_msg = "GOOD" if quality_acceptable else f"POOR (< {SILHOUETTE_MIN_SCORE})"
-                logger.info(f"{method_name}: {len(np.unique(labels))} clusters, "
-                          f"silhouette={silhouette:.4f} [{quality_msg}]")
+                quality_msg = "GOOD" if quality_acceptable else "POOR (< %s)" % 
+                SILHOUETTE_MIN_SCORE
+                logger.info("%s: %s clusters, silhouette=%.4f [%s]",
+                method_name, len(np.unique(labels)), silhouette, quality_msg)
         
         self.results['clustering'] = results
         return results
@@ -337,7 +338,7 @@ class SegmentationAnalyzer:
         with open(file_path, 'w') as f:
             json.dump(self.results, f, indent=JSON_INDENT, default=str)
         
-        logger.info(f"Results exported to {file_path}")
+        logger.info("Results exported to %s", file_path)
 
 
 def analyze_segments(input_file: str, output_file: str, 
@@ -353,7 +354,7 @@ def analyze_segments(input_file: str, output_file: str,
         n_clusters: Number of clusters (uses constant by default)
     """
     try:
-        logger.info(f"Loading data from {input_file}")
+        logger.info("Loading data from %s", input_file)
         df = pd.read_csv(input_file)
         
         analyzer = SegmentationAnalyzer(df)
@@ -362,7 +363,7 @@ def analyze_segments(input_file: str, output_file: str,
         analyzer.preprocess()
         optimal_k = analyzer.find_optimal_k()
         
-        logger.info(f"Using n_clusters={n_clusters} (optimal suggested: {optimal_k})")
+        logger.info("Using n_clusters=%s (optimal suggested: %s)", n_clusters, optimal_k)
         
         # Cluster with specified or default k
         cluster_results = analyzer.cluster(n_clusters=n_clusters)
@@ -388,7 +389,7 @@ def analyze_segments(input_file: str, output_file: str,
         print(f"✓ Exported to {output_file}")
         
     except Exception as e:
-        logger.error(f"Segmentation analysis failed: {e}")
+        logger.error("Segmentation analysis failed: %s", e)
         raise
 
 
