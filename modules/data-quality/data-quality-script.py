@@ -59,7 +59,7 @@ class DataQualityAnalyzer:
         self.data = data
         self.name = name
         self.report = {}
-        logger.info(f"Initialized DataQualityAnalyzer for {name}")
+        logger.info("Initialized DataQualityAnalyzer for %s", name)
 
     def validate_field(self, field_name: str, field_type: str,
                        required: bool = True) -> Dict[str, Any]:
@@ -284,7 +284,7 @@ class DataQualityAnalyzer:
         with open(output_path, 'w') as f:
             json.dump(self.report, f, indent=JSON_INDENT, default=str)
 
-        logger.info(f"Report exported to {filepath}")
+        logger.info("Report exported to %s", filepath)
 
 
 def analyze_data_quality(input_file: str, output_file: str,
@@ -307,7 +307,7 @@ def analyze_data_quality(input_file: str, output_file: str,
         data_path = Path(input_file)
 
         if not data_path.exists():
-            logger.error(f"Input file not found: {input_file}")
+            logger.error("Input file not found: %s", input_file)
             raise FileNotFoundError(f"Input file not found: {input_file}")
 
         # Load data
@@ -329,7 +329,7 @@ def analyze_data_quality(input_file: str, output_file: str,
         return report
 
     except Exception as e:
-        logger.error(f"Error during data quality analysis: {str(e)}")
+        logger.error("Error during data quality analysis: %s", str(e))
         raise
 
 
