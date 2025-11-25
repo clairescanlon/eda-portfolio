@@ -54,7 +54,7 @@ class DistributionAnalyzer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.summary = {}
         
-        logger.info(f"Initialized DistributionAnalyzer for {name}")
+        logger.info("Initialized DistributionAnalyzer for %s", name)
 
     def summarize(self) -> Dict[str, Any]:
         """
@@ -101,7 +101,7 @@ class DistributionAnalyzer:
                 summary["categorical"][col]["missing_percent"] = 0.0
 
         self.summary = summary
-        logger.info(f"Generated summary for {len(self.numeric)} numeric and {len(self.categorical)} categorical columns")
+        logger.info("Generated summary for %s numeric and %s categorical columns", len(self.numeric), len(self.categorical))
         return summary
 
     def visualize(self):
@@ -140,7 +140,7 @@ class DistributionAnalyzer:
             plt.savefig(self.output_dir / f"{col}_barplot.png")
             plt.close()
 
-        logger.info(f"Generated visualizations for {len(self.numeric) + len(self.categorical)} columns")
+        logger.info("Generated visualizations for %s columns", len(self.numeric) + len(self.categorical))
 
     def export_summary(self, file_path: str):
         """
@@ -157,7 +157,7 @@ class DistributionAnalyzer:
         with open(file, "w") as f:
             json.dump(self.summary, f, indent=JSON_INDENT, default=str)
         
-        logger.info(f"Summary exported to {file_path}")
+        logger.info("Summary exported to %s", file_path)
 
 
 def analyze_distributions(input_file="data/dataset.csv"):
