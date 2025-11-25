@@ -210,7 +210,7 @@ class StatTestRunner:
         
         return result
 
-def run(self) -> Dict[str, List[Dict[str, Any]]]:
+    def run(self) -> Dict[str, List[Dict[str, Any]]]:
     """
     Run all applicable statistical tests.
 
