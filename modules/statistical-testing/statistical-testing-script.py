@@ -52,7 +52,7 @@ class StatTestRunner:
         
         self.results: Dict[str, Any] = {}
         
-        logger.info(f"Initialized StatTestRunner: {len(self.numeric)} numeric, {len(self.categorical)} categorical columns")
+logger.info("Initialized StatTestRunner: %s numeric, %s categorical columns", len(self.numeric), len(self.categorical))
 
     def ttest_between_groups(self, group_col: str, numeric_col: str, 
                             group_values: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -263,7 +263,8 @@ class StatTestRunner:
         for test in results.keys()
         }
         
-        logger.info(f"Tests completed: {sig_counts}")
+        logger.info("Tests completed: %s", sig_counts)
+
         
         return results
 
@@ -290,7 +291,8 @@ class StatTestRunner:
         with open(file_out, "w") as f:
             json.dump(export_data, f, indent=JSON_INDENT, default=str)
         
-        logger.info(f"Results exported to {file_out}")
+        logger.info("Results exported to %s", file_out)
+
 
 
 def analyze_statistical_tests(input_file: str = "data/dataset.csv",
@@ -305,7 +307,7 @@ def analyze_statistical_tests(input_file: str = "data/dataset.csv",
         output_file: Path for output JSON
     """
     try:
-        logger.info(f"Loading data from {input_file}")
+        logger.info("Loading data from %s", input_file)
         df = pd.read_csv(input_file)
         
         runner = StatTestRunner(df)
