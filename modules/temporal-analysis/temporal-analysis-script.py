@@ -79,7 +79,7 @@ class AdditiveDecomposer(TimeSeriesDecomposer):
                 'residual_strength': float(residual_var / total_var) if total_var > 0 else 0.0
             }
         except Exception as e:
-            logger.warning(f"Additive decomposition failed: {e}")
+            logger.warning("Additive decomposition failed: %s", e)
             return {'error': str(e), 'method': 'additive'}
 
 
@@ -127,7 +127,7 @@ class MultiplicativeDecomposer(TimeSeriesDecomposer):
                 'residual_strength': float(residual_var / total_var) if total_var > 0 else 0.0
             }
         except Exception as e:
-            logger.warning(f"Multiplicative decomposition failed: {e}")
+            logger.warning("Multiplicative decomposition failed: %s", e)
             return {'error': str(e), 'method': 'multiplicative'}
 
 
@@ -153,9 +153,9 @@ class TemporalAnalyzer:
             self.df[time_col] = pd.to_datetime(self.df[time_col])
             self.df.set_index(time_col, inplace=True)
             self.df.sort_index(inplace=True)
-            logger.info(f"Time index set: {self.df.index.min()} to {self.df.index.max()}")
+            logger.info("Time index set: %s to %s", self.df.index.min(), self.df.index.max())
         except Exception as e:
-            logger.error(f"Failed to parse time column {time_col}: {e}")
+            logger.error("Failed to parse time column %s: %s", time_col, e)
             raise
         
         # Select value columns using utility function
@@ -165,7 +165,7 @@ class TemporalAnalyzer:
             self.value_cols = value_cols
         
         self.results = {}
-        logger.info(f"Initialized TemporalAnalyzer with {len(self.value_cols)} time series")
+        logger.info("Initialized TemporalAnalyzer with %s time series", len(self.value_cols))
 
     def detect_stationarity(self, series: pd.Series) -> Dict[str, Any]:
         """
@@ -198,7 +198,7 @@ class TemporalAnalyzer:
                 'critical_values': {k: float(v) for k, v in adf_result[4].items()}
             }
         except Exception as e:
-            logger.warning(f"ADF test failed: {e}")
+            logger.warning("ADF test failed: %s", e)
             return {'method': 'ADF', 'error': str(e)}
 
     def detect_autocorrelation(self, series: pd.Series, nlags: int = ACF_MAX_LAGS) -> Dict[str, Any]:
@@ -368,7 +368,7 @@ class TemporalAnalyzer:
         missing_stats = check_missing_values(self.df[self.value_cols])
         
         for col in self.value_cols:
-            logger.info(f"Analyzing temporal patterns in {col}...")
+            logger.info("Analyzing temporal patterns in %s...", col)
             series = self.df[col]
             
             self.results[col] = {
@@ -415,7 +415,7 @@ class TemporalAnalyzer:
         with open(file_path, 'w') as f:
             json.dump(export_data, f, indent=JSON_INDENT, default=str)
         
-        logger.info(f"Temporal analysis exported to {file_path}")
+        logger.info("Temporal analysis exported to %s", file_path)
 
 
 def analyze_temporal_patterns(input_file: str, time_col: str, output_file: str, 
@@ -452,7 +452,7 @@ def analyze_temporal_patterns(input_file: str, time_col: str, output_file: str,
             print(f"  {col}: {trend} trend, {stationarity}, {n_changepoints} changepoints")
         
     except Exception as e:
-        logger.error(f"Temporal analysis failed: {e}")
+        logger.error("Temporal analysis failed: %s", e)
         raise
 
 
