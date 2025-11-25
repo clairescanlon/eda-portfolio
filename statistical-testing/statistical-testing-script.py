@@ -213,6 +213,12 @@ class StatTestRunner:
 def run(self) -> Dict[str, List[Dict[str, Any]]]:
     """
     Run all applicable statistical tests.
+
+    Automatically determines which tests to run based on variable types
+    and adds significance flags using ALPHA constant.
+
+    Returns:
+        Dictionary with results for each test type
     ...
     """
     results: Dict[str, Any] = {
