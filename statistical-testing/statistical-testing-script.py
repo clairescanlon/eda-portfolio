@@ -50,7 +50,7 @@ class StatTestRunner:
         self.numeric = get_numeric_columns(df)
         self.categorical = get_categorical_columns(df)
         
-        self.results = {}
+        self.results: Dict[str, Any] = {}
         
         logger.info(f"Initialized StatTestRunner: {len(self.numeric)} numeric, {len(self.categorical)} categorical columns")
 
@@ -220,7 +220,7 @@ class StatTestRunner:
         Returns:
             Dictionary with results for each test type
         """
-        results = {'ttest': [], 'mannwhitney': [], 'anova': [], 'chi2': []}
+    results: Dict[str, Any] = {"ttest": ..., "mannwhitney": ..., "anova": ..., "chi2": ...}
         
         logger.info("Running statistical tests...")
         
@@ -307,7 +307,7 @@ def analyze_statistical_tests(input_file: str = "data/dataset.csv",
         results = runner.run()
         runner.export(output_file)
         
-        print(f"✓ Statistical testing complete")
+        print("✓ Statistical testing complete")
         print(f"✓ Significance level (alpha): {ALPHA}")
         print(f"✓ Results exported to {output_file}")
         
