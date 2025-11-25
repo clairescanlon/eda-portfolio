@@ -88,7 +88,7 @@ class CorrelationImportance(ImportanceMethod):
                     corr, _ = spearmanr(feature, y_encoded)
                     importances[name] = float(abs(corr))
             except Exception as e:
-                logger.warning(f"Correlation failed for {name}: {e}")
+                logger.warning("Correlation failed for %s: %s", name, e)
                 importances[name] = 0.0
         
         # Normalize to 0-1
@@ -132,7 +132,7 @@ class MutualInformationImportance(ImportanceMethod):
             return normalized
             
         except Exception as e:
-            logger.warning(f"Mutual information failed: {e}")
+            logger.warning("Mutual information failed: %s", e)
             return {name: 0.0 for name in feature_names}
 
 
@@ -176,7 +176,7 @@ class TreeImportance(ImportanceMethod):
             return importances
             
         except Exception as e:
-            logger.warning(f"Tree importance failed: {e}")
+            logger.warning("Tree importance failed: %s", e)
             return {name: 0.0 for name in feature_names}
 
 
@@ -231,7 +231,7 @@ class PermutationImportance(ImportanceMethod):
             return normalized
             
         except Exception as e:
-            logger.warning(f"Permutation importance failed: {e}")
+            logger.warning("Permutation importance failed: %s", e)
             return {name: 0.0 for name in feature_names}
 
 
@@ -254,7 +254,7 @@ class FeatureImportanceAnalyzer:
         self.problem_type = self._infer_problem_type()
         self.results = {}
         
-        logger.info(f"Initialized FeatureImportanceAnalyzer: {self.problem_type}, {len(self.feature_names)} features")
+        logger.info("Initialized FeatureImportanceAnalyzer: %s, %s features", self.problem_type, len(self.feature_names))
 
     def _infer_problem_type(self) -> str:
         """Infer whether problem is regression or classification."""
@@ -306,7 +306,7 @@ class FeatureImportanceAnalyzer:
         Returns:
             Dictionary with results from all methods
         """
-        logger.info(f"Starting feature importance analysis ({self.problem_type} problem)...")
+        logger.info("Starting feature importance analysis (%s problem)...", self.problem_type)
         
         X, y = self._prepare_data()
         
@@ -321,7 +321,7 @@ class FeatureImportanceAnalyzer:
         # Calculate importance for each method
         method_results = {}
         for method_name, method_obj in methods.items():
-            logger.info(f"Calculating {method_name}...")
+            logger.info("Calculating %s...", method_name)
             scores = method_obj.calculate(X, y, self.feature_names, self.problem_type)
             method_results[method_name] = scores
         
@@ -347,7 +347,7 @@ class FeatureImportanceAnalyzer:
             'significant_features': [{'feature': f, 'importance': s} for f, s in ranked_filtered]
         }
         
-        logger.info(f"Analysis complete: {len(ranked_filtered)} significant features (threshold: {MIN_IMPORTANCE_THRESHOLD})")
+        logger.info("Analysis complete: %s significant features (threshold: %s)", len(ranked_filtered), MIN_IMPORTANCE_THRESHOLD)
         
         return self.results
 
@@ -362,7 +362,7 @@ class FeatureImportanceAnalyzer:
         with open(file_path, 'w') as f:
             json.dump(self.results, f, indent=JSON_INDENT, default=str)
         
-        logger.info(f"Feature importance exported to {file_path}")
+        logger.info("Feature importance exported to %s", file_path)
 
 
 def analyze_feature_importance(input_file: str, target_col: str, output_file: str):
@@ -399,7 +399,7 @@ def analyze_feature_importance(input_file: str, target_col: str, output_file: st
             print(f"  {i}. {item['feature']}: {item['importance']:.4f}")
         
     except Exception as e:
-        logger.error(f"Feature importance analysis failed: {e}")
+        logger.error("Feature importance analysis failed: %s", e)
         raise
 
 
