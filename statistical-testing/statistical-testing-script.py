@@ -220,7 +220,19 @@ class StatTestRunner:
         Returns:
             Dictionary with results for each test type
         """
-    results: Dict[str, Any] = {"ttest": ..., "mannwhitney": ..., "anova": ..., "chi2": ...}
+def run(self) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Run all applicable statistical tests.
+    ...
+    """
+    results: Dict[str, Any] = {
+        "ttest": [],
+        "mannwhitney": [],
+        "anova": [],
+        "chi2": []
+    }
+    
+    logger.info("Running statistical tests...")
         
         logger.info("Running statistical tests...")
         
