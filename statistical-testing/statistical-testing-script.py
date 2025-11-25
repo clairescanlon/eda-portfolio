@@ -219,7 +219,6 @@ class StatTestRunner:
 
     Returns:
         Dictionary with results for each test type
-    ...
     """
     results: Dict[str, Any] = {
         "ttest": [],
