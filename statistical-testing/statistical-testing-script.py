@@ -231,43 +231,43 @@ class StatTestRunner:
         
         # Pairwise numeric ~ categorical
         for num in self.numeric:
-            for cat in self.categorical:
-                vals = self.df[cat].dropna().unique()
+        for cat in self.categorical:
+        vals = self.df[cat].dropna().unique()
                 
-                if len(vals) == 2:
-                    ttest_res = self.ttest_between_groups(cat, num, list(vals))
-                    if ttest_res:
-                        results['ttest'].append({'cat': cat, 'num': num, **ttest_res})
+        if len(vals) == 2:
+        ttest_res = self.ttest_between_groups(cat, num, list(vals))
+        if ttest_res:
+        results['ttest'].append({'cat': cat, 'num': num, **ttest_res})
                     
-                    mw_res = self.mannwhitney_between_groups(cat, num, list(vals))
-                    if mw_res:
-                        results['mannwhitney'].append({'cat': cat, 'num': num, **mw_res})
+        mw_res = self.mannwhitney_between_groups(cat, num, list(vals))
+        if mw_res:
+        results['mannwhitney'].append({'cat': cat, 'num': num, **mw_res})
                 
-                if len(vals) >= 2:
-                    anova_res = self.anova(cat, num)
-                    if anova_res:
-                        results['anova'].append({'cat': cat, 'num': num, **anova_res})
+        if len(vals) >= 2:
+        anova_res = self.anova(cat, num)
+        if anova_res:
+        results['anova'].append({'cat': cat, 'num': num, **anova_res})
         
         # Pairwise categorical ~ categorical
         for i, cat1 in enumerate(self.categorical):
-            for cat2 in self.categorical[i+1:]:
-                chi2_res = self.chi2_test(cat1, cat2)
-                if chi2_res:
-                    results['chi2'].append(chi2_res)
+        for cat2 in self.categorical[i+1:]:
+        chi2_res = self.chi2_test(cat1, cat2)
+        if chi2_res:
+        results['chi2'].append(chi2_res)
         
         self.results = results
         
         # Count significant results
         sig_counts = {
-            test: sum(1 for r in results[test] if r.get('significant', False))
-            for test in results.keys()
+        test: sum(1 for r in results[test] if r.get('significant', False))
+        for test in results.keys()
         }
         
         logger.info(f"Tests completed: {sig_counts}")
         
         return results
 
-    def export(self, file_out: str) -> None:
+        def export(self, file_out: str) -> None:
         """
         Export test results to JSON.
         
