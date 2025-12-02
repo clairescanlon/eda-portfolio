@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 class ValidationStatus(Enum):
     """Enum for validation status outcomes."""
-    PASS = "PASS"
+    OK = "OK"
     WARN = "WARN"
     FAIL = "FAIL"
 
@@ -78,7 +78,7 @@ class DataQualityAnalyzer:
         result = {
             "field": field_name,
             "type_expected": field_type,
-            "status": ValidationStatus.PASS.value,
+            "status": ValidationStatus.OK.value,
             "issues": []
         }
 
