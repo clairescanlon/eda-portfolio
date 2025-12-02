@@ -6,15 +6,14 @@ import logging
 from enum import Enum
 import json
 
-# Import from utils
 from utils.constants import (
-    MAX_MISSING_RATE,
     MIN_UNIQUE_RATIO,
     MAX_UNIQUE_RATIO,
     JSON_INDENT,
     LOGGING_FORMAT,
     LOGGING_LEVEL
 )
+
 from utils.data_utils import (
     get_numeric_columns,
     get_categorical_columns,
