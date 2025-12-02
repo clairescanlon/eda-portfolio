@@ -59,33 +59,19 @@ class DataQualityAnalyzer:
         self.report: Dict[str, Any] = {}
         logger.info("Initialized DataQualityAnalyzer for %s", name)
 
-    def validate_field(self, field_name: str, field_type: str,
-                       required: bool = True) -> Dict[str, Any]:
-        """
-        Generalized field validation using parameterized approach.
-        
-        Validates a single field against type and completeness criteria.
-        Replaces multiple specific validators with one flexible function.
-        
-        Args:
-            field_name: column name to validate
-            field_type: expected data type ('int', 'float', 'str', 'datetime')
-            required: whether null values are acceptable
-            
-        Returns:
-            Dictionary containing validation results
-        """
-        result = {
-            "field": field_name,
-            "type_expected": field_type,
-            "status": ValidationStatus.OK.value,
-            "issues": []
-        }
-
-        if field_name not in self.data.columns:
-            result["status"] = ValidationStatus.FAIL.value
-            result["issues"].append(f"Column '{field_name}' not found")
-            return result
+def validate_field(self, field_name: str, field_type: str,
+                   required: bool = True) -> Dict[str, Any]:
+    result: Dict[str, Any] = {
+        "field": field_name,
+        "type_expected": field_type,
+        "status": ValidationStatus.OK.value,
+        "issues": []  # mypy now knows this is mutable List[str]
+    }
+    
+    if field_name not in self.data.columns:
+        result["issues"].append(f"Column '{field_name}' not found")  # ✅ Fixed
+        result["status"] = ValidationStatus.FAIL.value
+        return result
 
         column = self.data[field_name]
 
