@@ -56,7 +56,7 @@ class DataQualityAnalyzer:
         """
         self.data = data
         self.name = name
-        self.report = {}
+        self.report: Dict[str, Any] = {}
         logger.info("Initialized DataQualityAnalyzer for %s", name)
 
     def validate_field(self, field_name: str, field_type: str,
