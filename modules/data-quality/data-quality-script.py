@@ -15,7 +15,6 @@ from utils.constants import (
 )
 
 from utils.data_utils import (
-    get_numeric_columns,
     get_categorical_columns,
     check_missing_values,
     get_dataframe_summary,
