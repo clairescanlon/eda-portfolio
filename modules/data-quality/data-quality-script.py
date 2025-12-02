@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import Dict, Tuple, Any
+from typing import Dict, Tuple, Any, Optional
 import logging
 from enum import Enum
 import json
@@ -182,7 +182,7 @@ def validate_field(self, field_name: str, field_type: str,
         self.report["consistency"] = consistency
         return consistency
 
-    def assess_validity(self, rules: Dict[str, Any] = None) -> Dict[str, Any]:
+    def assess_validity(self, rules: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Assess data validity against defined rules and standards.
         
