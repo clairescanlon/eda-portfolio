@@ -50,7 +50,6 @@ Claire Scanlon
 ## 🔗 Connect
 * GitHub: [Claire Scanlon GitHub](https://github.com/clairescanlon/)
 * LinkedIn: [Claire Scanlon](https://www.linkedin.com/in/clairescanlon/)
-* Portfolio: [Website](https://www.claire-scanlon.com)
 * Medium: [Insights, Tutorials, and Thought Leadership](https://medium.com/@clairehelenscanlon)
 
 
