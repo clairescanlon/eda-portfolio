@@ -22,7 +22,6 @@ Before you build pipelines, train models, or make decisions, you need to underst
 ## 🛠️ What Each Module Teaches
 * **data_quality**: Missing values, duplicates, data validation, completeness assessment, data profiling, quality metrics, anomaly detection in data integrity
 * **distributions**: Distribution analysis, shape characteristics (skewness, kurtosis), normality testing, visual exploration, histogram interpretation, probability distributions, tail analysis
-* **feature_importance**: Feature ranking, variable influence on outcomes, correlation analysis, feature selection methods, predictive power assessment, dominance patterns
 * **outlier_detection**: Anomaly identification, detection methods (statistical, clustering-based), outlier handling strategies, impact quantification, IQR analysis, z-score methods, isolation techniques
 * **segmentation**: Clustering and grouping, customer/data segmentation, pattern identification, cluster characteristics, segmentation strategies, group profiling, market segmentation
 * **statistical_testing**: Hypothesis testing, p-values, significance levels, t-tests, chi-square tests, ANOVA, test selection criteria, statistical validation of relationships
@@ -36,15 +35,6 @@ These 7 modules represent a comprehensive, systematic approach to exploratory da
 
 > [!WARNING]
 > This repository is under construction.
-
-
-
-
----
-## 👤 Author
-Claire Scanlon 
-* AWS Certified Cloud Practitioner
-* Full stack data professional
 
 
 ## 🔗 Connect
